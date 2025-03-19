@@ -1,27 +1,17 @@
 import express from 'express';
-import fs from 'fs';
+import dotenv from 'dotenv';
 import cors from 'cors';
+import connectDB from './config/db.js';
+import dataRoutes from './routes/dataRoutes.js';
+
+dotenv.config();
+connectDB();
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-const DATA_FILE = './data.json';
+app.use('/api/data', dataRoutes);
 
-// Read Data
-app.get('/api/data', (req, res) => {
-  const data = JSON.parse(fs.readFileSync(DATA_FILE));
-  res.json(data);
-});
-
-// Add Data
-app.post('/api/data', (req, res) => {
-  const newData = req.body;
-  const currentData = JSON.parse(fs.readFileSync(DATA_FILE));
-  currentData.push(newData);
-
-  fs.writeFileSync(DATA_FILE, JSON.stringify(currentData, null, 2));
-  res.json({ message: 'Data added successfully!' });
-});
-
-app.listen(4000, () => console.log('Server running on http://localhost:4000'));
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

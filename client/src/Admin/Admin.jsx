@@ -1,49 +1,39 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { addData } from '../api';
 
 const Admin = () => {
-  const [formData, setFormData] = useState({
-    day: '',
-    numbers: [0, 0, 0],
-    result: 0,
-  });
+  const [week, setWeek] = useState('');
+  const [numbers, setNumbers] = useState('');
+  const [results, setResults] = useState('');
 
-  const handleChange = (e, index = null) => {
-    if (index !== null) {
-      const updatedNumbers = [...formData.numbers];
-      updatedNumbers[index] = Number(e.target.value);
-      setFormData({ ...formData, numbers: updatedNumbers });
-    } else {
-      setFormData({ ...formData, [e.target.name]: e.target.value });
-    }
-  };
-
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      await axios.post('http://localhost:4000/api/data', formData);
+      const formattedNumbers = numbers.split(';').map(row => row.split(',').map(Number));
+      const formattedResults = results.split(',').map(Number);
+      await addData({ week, numbers: formattedNumbers, results: formattedResults });
       alert('Data added successfully!');
     } catch (error) {
-      console.error('Error adding data:', error);
+      console.error(error);
+      alert('Error adding data');
     }
   };
 
   return (
     <div>
       <h1>Admin Panel - Add Data</h1>
-      <label>Day: </label>
-      <input name="day" onChange={handleChange} />
-      
-      {[0, 1, 2].map((index) => (
-        <div key={index}>
-          <label>Number {index + 1}: </label>
-          <input type="number" onChange={(e) => handleChange(e, index)} />
-        </div>
-      ))}
+      <form onSubmit={handleSubmit}>
+        <label>Week:</label>
+        <input type="text" value={week} onChange={(e) => setWeek(e.target.value)} required />
 
-      <label>Result: </label>
-      <input name="result" type="number" onChange={handleChange} />
-      
-      <button onClick={handleSubmit}>Add Data</button>
+        <label>Numbers (Format: 1,2,3;4,5,6):</label>
+        <input type="text" value={numbers} onChange={(e) => setNumbers(e.target.value)} required />
+
+        <label>Results (Comma-separated):</label>
+        <input type="text" value={results} onChange={(e) => setResults(e.target.value)} required />
+
+        <button type="submit">Submit</button>
+      </form>
     </div>
   );
 };

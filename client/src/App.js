@@ -2,7 +2,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Admin from './Admin/Admin.jsx';
-import User from './User/User.jsx';
+import UserDashboard from './User/UserDashboard.jsx';
 
 const App = () => (
   <Router>
@@ -14,7 +14,7 @@ const App = () => (
       
       <Routes>
         <Route path="/admin" element={<Admin />} />
-        <Route path="/user" element={<User />} />
+        <Route path="/user" element={<UserDashboard />} />
       </Routes>
     </div>
   </Router>
