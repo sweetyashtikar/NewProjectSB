@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
 
 const DataSchema = new mongoose.Schema({
-  week: String,
+  startDate: { type: String, required: true },
+  endDate: { type: String, required: true },
   numbers: [[Number]],
   results: [Number],
 });

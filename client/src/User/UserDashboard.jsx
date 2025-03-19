@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import '../style/WeeklyTable.css';
 
 const UserDashboard = () => {
   const [data, setData] = useState([]);
@@ -17,24 +18,26 @@ const UserDashboard = () => {
   }, []);
 
   return (
-    <div>
+    <div className="dashboard-container">
       <h1>User Dashboard</h1>
-      <table border="1">
+      <table className="data-table">
         <thead>
           <tr>
-            <th>Day</th>
+            <th>Week</th>
             <th>Numbers</th>
-            <th>Open</th>
-            <th>Close</th>
+            <th>Results</th>
           </tr>
         </thead>
         <tbody>
           {data.map((item, index) => (
             <tr key={index}>
-              <td>{item.day}</td>
-              <td>{item.numbers.join(', ')}</td>
-              <td>{String(item.open).padStart(2, '0')}</td>
-              <td>{String(item.close).padStart(2, '0')}</td>
+              <td>{`${item.startDate} to ${item.endDate}`}</td>
+              <td>
+                {item.numbers.map((row, i) => (
+                  <div key={i}>{row.join(' ')}</div>
+                ))}
+              </td>
+              <td>{item.results.join(' ')}</td>
             </tr>
           ))}
         </tbody>
