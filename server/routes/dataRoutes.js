@@ -1,9 +1,9 @@
 import express from 'express';
-import { getData, addData } from '../controllers/dataController.js';
+import { addData, getData } from '../controllers/dataController.js';
 
 const router = express.Router();
 
-router.get('/', getData);
-router.post('/', addData);
+router.get('/get', getData);
+router.post('/add', addData);
 
 export default router;
